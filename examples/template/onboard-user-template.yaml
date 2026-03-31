@@ -1,0 +1,66 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: onboarding-workflow-tile
+  title: Onboard User to Org
+  description: Workflow to create repo, team, and CODEOWNERS
+
+spec:
+  owner: user:guest
+  type: service
+
+  parameters:
+    - title: Onboarding Details
+      required: [githubOrg, githubUser, repoName, teamName]
+      properties:
+        githubOrg:
+          type: string
+          title: GitHub Organization
+          description: Your GitHub organization name
+        githubUser:
+          type: string
+          title: GitHub Username
+        repoName:
+          type: string
+          title: New Repository Name
+        teamName:
+          type: string
+          title: GitHub Team Name
+
+  steps:
+    - id: fetch-onboarding
+      name: Fetch Onboarding Files
+      action: fetch:template
+      input:
+        url: ./onboarding-skeleton
+        values:
+          githubOrg: ${{ parameters.githubOrg }}
+          githubUser: ${{ parameters.githubUser }}
+          teamName: ${{ parameters.teamName }}
+
+    - id: publish-onboarding
+      name: Create Onboarding Repo
+      action: publish:github
+      input:
+        repoUrl: 'github.com?owner=${{ parameters.githubOrg }}&repo=${{ parameters.repoName }}'
+        defaultBranch: main
+        description: 'Onboarding repo for ${{ parameters.githubUser }}'
+        repoVisibility: public
+
+    - id: trigger-team-creation
+      name: Create GitHub Team and Add User
+      action: github:actions:dispatch
+      input:
+        repoUrl: 'github.com?owner=${{ parameters.githubOrg }}&repo=platform-automation'
+        workflowId: create-team.yml
+        branchOrTagName: main
+        workflowInputs:
+          team_name: ${{ parameters.teamName }}
+          github_user: ${{ parameters.githubUser }}
+          repo_name: ${{ parameters.repoName }}
+
+  output:
+    links:
+      - title: Open Repository
+        url: https://github.com/${{ parameters.githubOrg }}/${{ parameters.repoName }}
+

@@ -1,0 +1,24 @@
+* @quantum-lab-x/${{ values.teamName }}
+EOF
+
+# catalog-info.yaml
+cat > examples/template/content/catalog-info.yaml << 'EOF'
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.repoName }}
+spec:
+  type: service
+  owner: user:guest
+  lifecycle: experimental
+EOF
+
+# README.md
+cat > examples/template/content/README.md << 'EOF'
+# ${{ values.repoName }}
+
+Created by Backstage scaffolder.
+
+## Team
+${{ values.teamName }}
+
