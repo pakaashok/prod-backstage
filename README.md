@@ -98,3 +98,48 @@ This project provides a fully containerized Backstage developer portal that enab
 | OS (VM) | Debian Bookworm | 12 |
 
 ## Project Structure
+backstage/
+├── Dockerfile
+├── .dockerignore
+├── app-config.yaml
+├── app-config.local.yaml          # Gitignored - contains secrets
+├── package.json
+├── backstage.json
+├── yarn.lock
+├── .yarnrc.yml
+├── .yarn/
+├── packages/
+│   ├── app/
+│   │   └── src/
+│   │       ├── App.tsx
+│   │       └── modules/nav/Sidebar.tsx
+│   └── backend/
+│       └── src/index.ts
+└── examples/
+    ├── entities.yaml
+    ├── org.yaml
+    └── template/
+        ├── template.yaml
+        ├── onboard-user-template.yaml
+        ├── content/
+        │   ├── CODEOWNERS
+        │   ├── README.md
+        │   └── catalog-info.yaml
+        └── onboarding-skeleton/
+            ├── README.md
+            └── .github/
+                ├── CODEOWNERS
+                └── workflows/onboard.yml
+
+
+## Quick Start
+
+### Step 1: Pull Image
+
+```bash
+docker pull adeeashok/backstage:v1.2.0
+
+Step 2: Create Local Config
+
+```bash
+Create app-config.local.yaml with your GitHub PAT:
