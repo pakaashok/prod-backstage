@@ -130,16 +130,3 @@ backstage/
             └── .github/
                 ├── CODEOWNERS
                 └── workflows/onboard.yml
-
-
-## Quick Start
-
-### Step 1: Pull Image
-
-```bash
-docker pull adeeashok/backstage:v1.2.0
-
-Step 2: Create Local Config
-
-```bash
-Create app-config.local.yaml with your GitHub PAT:
